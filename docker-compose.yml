@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+        POSTGRES_PASSWORD: ChangeMe123!
+        POSTGRES_DB: JWTAuthTemplate
+
+  jwtauthtemplate:
+    image: ${DOCKER_REGISTRY-}jwtauthtemplate
+    build:
+      context: .
+      dockerfile: JWTAuthTemplate/Dockerfile
+    links:
+       - "db:db"
+    depends_on:
+        - db
+    environment:
+       JWT_SECRET: ChangeMeChangeMe123321ChangeMeChangeMeChangeMe123!!!!//...///
+       JWT_ISSUER: http://localhost:5000
+       JWT_AUDIENCE: http://localhost:5000
+       CONNECTION_STRING: Host=db;Database=JWTAuthTemplate;Username=postgres;Password=ChangeMe123!
+    ports:
+        - "5500:80" 
+        - "5501:443"
