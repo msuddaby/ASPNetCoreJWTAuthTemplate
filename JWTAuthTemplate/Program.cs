@@ -27,12 +27,10 @@ namespace JWTAuthTemplate
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var key = Environment.GetEnvironmentVariable("JWT_SECRET") ?? builder.Configuration["JWT:Secret"];
-            var validAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? builder.Configuration["JWT:ValidAudience"];
-            var validIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? builder.Configuration["JWT:ValidIssuer"];
+            builder.Configuration["JWT:Secret"] = Environment.GetEnvironmentVariable("JWT_SECRET") ?? builder.Configuration["JWT:Secret"];
+            builder.Configuration["JWT:ValidAudience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? builder.Configuration["JWT:ValidAudience"];
+            builder.Configuration["JWT:ValidIssuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? builder.Configuration["JWT:ValidIssuer"];
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection");
-
-
 
             //Add Postgres database
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -69,10 +67,10 @@ namespace JWTAuthTemplate
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = false,
-                        ValidAudience = validAudience,
-                        ValidIssuer = validIssuer,
+                        ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!))
                     };
                 });
 

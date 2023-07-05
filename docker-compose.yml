@@ -23,5 +23,5 @@ services:
        JWT_AUDIENCE: http://localhost:5000
        CONNECTION_STRING: Host=db;Database=JWTAuthTemplate;Username=postgres;Password=ChangeMe123!
     ports:
-        - "5500:80" 
-        - "5501:443"
+        - "5505:80" 
+        - "5506:443"
